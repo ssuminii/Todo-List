@@ -6,24 +6,49 @@ let taskList =[];
 let mode = 'all';
 let filterList = [];
 
+// underLine animation
+let underLine = document.getElementById('under-line');
+
 addButton.addEventListener('click', addTask);
+
+// Enter 누르면 아이템 추가
+taskInput.onkeydown = (event) => {
+    if (event.key === 'Enter') {
+        addTask();
+    }
+}
+
+// 입력한 할 일이 없다면 아이템이 추가 ❌
+taskInput.addEventListener('input', function() {
+    addButton.disabled = taskInput.value === '';
+});
+
 
 // 진행중 끝남 탭을 누르면 언더바 이동
 for (let i = 1; i < tabs.length; i++) {
-    tabs[i].addEventListener("click", function(event){filter(event)});
+    tabs[i].addEventListener("click", function(e){filter(e)});
 }
 
 // + 버튼을 누르면 할일이 추가
 function addTask() {
-    let task = {
-        id: randomIDGeneration(),
-        taskContent: taskInput.value,
-        isComplete: false,
-    };
-    taskList.push(task);
-    console.log(taskList);
-    render();
+    if (taskInput.value !== ''){
+        let task = {
+            id: randomIDGeneration(),
+            taskContent: taskInput.value,
+            isComplete: false,
+        };
+        taskList.push(task);
+        console.log(taskList);
+        render();
+        
+        // 버튼 비활성화
+        addButton.disabled = true;
+
+        // 할 일 입력후 입력창 자동으로 비워지게 하기
+        taskInput.value ='';
+    }
 }
+
 
 // 할일 List 화면에 표시
 // ui 함수 
@@ -43,24 +68,22 @@ function render() {
         // 2) ture이면 끝난 걸로 간주하고 밑줄 보여주기
         if (list[i].isComplete == true) {
             resultHTML += `<div class="task">
-        <div class="task-done">${list[i].taskContent}</div>
-        <div>
             <button type="button" onclick="toggleComplete('${list[i].id}')">Check</button>
+            <div class="task-done">${list[i].taskContent}</div>
             <button type="button" onclick="deleteTask('${list[i].id}')">Delete</button>
-        </div>
     </div>`;
     // 3) false이면 안끝난 걸로 간주하고 그대로
         } else {
             resultHTML += `<div class="task">
-        <div>${list[i].taskContent}</div>
-        <div>
             <button type="button" onclick="toggleComplete('${list[i].id}')">Check</button>
+            <div>${list[i].taskContent}</div>
             <button type="button" onclick="deleteTask('${list[i].id}')">Delete</button>
-        </div>
     </div>`;
         }
     }
     document.getElementById('task-board').innerHTML = resultHTML;
+
+
 }
 
 // check button
@@ -89,7 +112,12 @@ function deleteTask(id) {
     render();
 }
 
-function filter(event) {
+function filter(e) {
+    // UnderLine event
+    underLine.style.left = e.currentTarget.offsetLeft + "px";
+    underLine.style.width = e.currentTarget.offsetWidth + "px";
+    underLine.style.top = e.currentTarget.offsetTop + e.currentTarget.offsetHeight + "px";
+
     mode = event.target.id;
     filterList = [];
     if (mode === "all") {
@@ -122,4 +150,3 @@ function filter(event) {
 function randomIDGeneration() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
-
