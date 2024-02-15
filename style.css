@@ -54,12 +54,14 @@ h1 {
 
 #under-line {
     position: absolute;
-    height: 4px;
+    height: 2px;
     background-color: #f4c5c3;
-    width: 60px;
-    left: 0px;
-    top: 52px;
-    padding: 0; 
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 6px;
+    width: 0;
+    left: 0;
+    top: 0;
+    padding: 0;
+    transition: 0.5s;
 }
 
 .task {
