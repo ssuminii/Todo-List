@@ -107,15 +107,12 @@ function toggleComplete(id) {
 // delete button
 // delete버튼을 누르면 할일이 삭제
 function deleteTask(id) {
-
-    for (let i = 0; i < taskList.length; i++) {
-        if (taskList[i].id == id) {
-            taskList.splice(i, 1);
-            break;
-        }
-    }
+    taskList = taskList.filter(task => task.id !== id);
+    filterList = filterList.filter(task => task.id !== id);
     render();
 }
+
+
 
 function filter(e) {
     // UnderLine event
