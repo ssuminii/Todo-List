@@ -68,16 +68,20 @@ function render() {
         // 2) ture이면 끝난 걸로 간주하고 밑줄 보여주기
         if (list[i].isComplete == true) {
             resultHTML += `<div class="task">
-            <button type="button" onclick="toggleComplete('${list[i].id}')">Check</button>
-            <div class="task-done">${list[i].taskContent}</div>
-            <button type="button" onclick="deleteTask('${list[i].id}')">Delete</button>
+        <div class="task-done">${list[i].taskContent}</div>
+        <div>
+            <button type="button" class="button-16" onclick="toggleComplete('${list[i].id}')">Check</button>
+            <button type="button" class="button-16" onclick="deleteTask('${list[i].id}')">Delete</button>
+        </div>
     </div>`;
     // 3) false이면 안끝난 걸로 간주하고 그대로
         } else {
             resultHTML += `<div class="task">
-            <button type="button" onclick="toggleComplete('${list[i].id}')">Check</button>
-            <div>${list[i].taskContent}</div>
-            <button type="button" onclick="deleteTask('${list[i].id}')">Delete</button>
+        <div>${list[i].taskContent}</div>
+        <div>
+            <button type="button" class="button-16" onclick="toggleComplete('${list[i].id}')">Check</button>
+            <button type="button" class="button-16" onclick="deleteTask('${list[i].id}')">Delete</button>
+        </div>
     </div>`;
         }
     }
