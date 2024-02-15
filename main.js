@@ -1,18 +1,17 @@
-// delete버튼을 누르면 할일이 삭제
-// check 버튼을 누르면 할일이 끝나면서 줄쳐짐
-// 1) check 버튼을 클릭하는 순간 false -> true
-// 2) ture이면 끝난 걸로 간주하고 밑줄 보여주기
-// 3) false이면 안끝난 걸로 간주하고 그대로
-// 진행중 끝남 탭을 누르면 언더바 이동
-// done탭은 끝난 아이템만, active 탭은 진행중인 아이템만
-// All 탭을 누르면 모든 아이템 보여주기
-
 // 유저가 할일을 입력
 let taskInput = document.getElementById('task-input');
 let addButton = document.getElementById('add-button');
+let tabs = document.querySelectorAll(".task-tabs div");
 let taskList =[];
+let mode = 'all';
+let filterList = [];
 
 addButton.addEventListener('click', addTask);
+
+// 진행중 끝남 탭을 누르면 언더바 이동
+for (let i = 1; i < tabs.length; i++) {
+    tabs[i].addEventListener("click", function(event){filter(event)});
+}
 
 // + 버튼을 누르면 할일이 추가
 function addTask() {
@@ -29,22 +28,34 @@ function addTask() {
 // 할일 List 화면에 표시
 // ui 함수 
 function render() {
+    // 1. 내가 선택한 탭에 따라서
+    let list = [];
+    // 2. list를 다르게 보여준다
+    // ex) all -> taskList, active, done -> filterList
+    if (mode === "all") {
+        list = taskList;
+    } else if (mode === "active" || mode === "done") {
+        list = filterList;
+    }
+
     let resultHTML = "";
-    for (let i = 0; i < taskList.length; i++) {
-        if (taskList[i].isComplete == true) {
+    for (let i = 0; i < list.length; i++) {
+        // 2) ture이면 끝난 걸로 간주하고 밑줄 보여주기
+        if (list[i].isComplete == true) {
             resultHTML += `<div class="task">
-        <div class="task-done">${taskList[i].taskContent}</div>
+        <div class="task-done">${list[i].taskContent}</div>
         <div>
-            <button type="button" onclick="toggleComplete('${taskList[i].id}')">Check</button>
-            <button type="button" onclick="deleteTask('${taskList[i].id}')">Delete</button>
+            <button type="button" onclick="toggleComplete('${list[i].id}')">Check</button>
+            <button type="button" onclick="deleteTask('${list[i].id}')">Delete</button>
         </div>
     </div>`;
+    // 3) false이면 안끝난 걸로 간주하고 그대로
         } else {
             resultHTML += `<div class="task">
-        <div>${taskList[i].taskContent}</div>
+        <div>${list[i].taskContent}</div>
         <div>
-            <button type="button" onclick="toggleComplete('${taskList[i].id}')">Check</button>
-            <button type="button" onclick="deleteTask('${taskList[i].id}')">Delete</button>
+            <button type="button" onclick="toggleComplete('${list[i].id}')">Check</button>
+            <button type="button" onclick="deleteTask('${list[i].id}')">Delete</button>
         </div>
     </div>`;
         }
@@ -52,9 +63,11 @@ function render() {
     document.getElementById('task-board').innerHTML = resultHTML;
 }
 
-// check button 
+// check button
+// check 버튼을 누르면 할일이 끝나면서 줄쳐짐
 function toggleComplete(id) {
     for (let i = 0; i < taskList.length; i++) {
+        // 1) check 버튼을 클릭하는 순간 false -> true
         if (taskList[i].id == id) {
             taskList[i].isComplete = !taskList[i].isComplete;
             break;
@@ -65,6 +78,7 @@ function toggleComplete(id) {
 }
 
 // delete button
+// delete버튼을 누르면 할일이 삭제
 function deleteTask(id) {
     for (let i = 0; i < taskList.length; i++) {
         if (taskList[i].id == id) {
@@ -75,7 +89,37 @@ function deleteTask(id) {
     render();
 }
 
+function filter(event) {
+    mode = event.target.id;
+    filterList = [];
+    if (mode === "all") {
+        // 전체 리스트를 보여줌
+        render();
+    } else if (mode === "active") {
+        // 진행중인 아이템을 보여줌
+        // task.isComplete = false 
+        for (let i = 0; i < taskList.length; i++) {
+            if (taskList[i].isComplete === false) {
+                filterList.push(taskList[i]);
+            }
+        }
+        render();
+        console.log("진행중", filterList);
+    } else if (mode === "done") {
+        // 끝나는 케이스 
+        // task.isComplete = true (checked) 
+        for (let i = 0; i < taskList.length; i++) {
+            if (taskList[i].isComplete === true) {
+                filterList.push(taskList[i]);
+            }
+        }
+        render();
+        console.log("done",filterList);
+    }
+}
+
 // random ID
 function randomIDGeneration() {
     return '_' + Math.random().toString(36).substr(2, 9);
 }
+
