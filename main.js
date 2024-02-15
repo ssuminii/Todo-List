@@ -107,6 +107,7 @@ function toggleComplete(id) {
 // delete button
 // delete버튼을 누르면 할일이 삭제
 function deleteTask(id) {
+
     for (let i = 0; i < taskList.length; i++) {
         if (taskList[i].id == id) {
             taskList.splice(i, 1);
@@ -122,7 +123,7 @@ function filter(e) {
     underLine.style.width = e.currentTarget.offsetWidth + "px";
     underLine.style.top = e.currentTarget.offsetTop + e.currentTarget.offsetHeight + "px";
 
-    mode = event.target.id;
+    mode = e.target.id;
     filterList = [];
     if (mode === "all") {
         // 전체 리스트를 보여줌

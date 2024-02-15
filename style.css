@@ -34,9 +34,16 @@ h1 {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+.input-area{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .task-area {
     border: 1px solid #f4c5c3;
     margin-top: 2em;
+    
 }
 
 #task-input {
@@ -81,7 +88,7 @@ h1 {
 .task {
     display: flex;
     justify-content: space-between;
-    padding: 3em;
+    padding: 1.5em;
 }
 
 .task-done {
